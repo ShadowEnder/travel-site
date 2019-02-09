@@ -4,7 +4,8 @@ var gulp = require('gulp'),
     autoprefixer = require('autoprefixer'),
     cssvars = require('postcss-simple-vars'),
     nested = require('postcss-nested'),
-    cssImport = require('postcss-import');
+    cssImport = require('postcss-import'),
+    browserSync = require('browser-sync').create();
 
 gulp.task('default', function(done) {
   console.log("Hooray - you created a Gulp task.");
@@ -26,10 +27,24 @@ function styles() {
 };
 
 gulp.task('watch', function() {
+  browserSync.init({
+    notify: false,
+    server: {
+      baseDir: "app"
+    }
+  });
   watch('./app/index.html', function() {
+    browserSync.reload();
     html();
   }); // file on computer you want to watch, what happens when changes occur
   watch('./app/assets/styles/**/*.css', function() {
     styles();
+    cssInject();
   });
 });
+
+gulp.task('cssInject', cssInject);
+function cssInject() {
+  return gulp.src('./app/temp/styles/styles.css')
+    .pipe(browserSync.stream());
+};
