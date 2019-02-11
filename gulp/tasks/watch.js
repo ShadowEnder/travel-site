@@ -20,7 +20,7 @@ gulp.task('watch', function() {
   });
   watch('./app/index.html', function() {
     browserSync.reload();
-    html();
+    // html();
   }); // file on computer you want to watch, what happens when changes occur
   watch('./app/assets/styles/**/*.css', function() {
     styles();
