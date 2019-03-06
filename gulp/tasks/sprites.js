@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     svgSprite = require('gulp-svg-sprite'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    del = require('del'); // close text editor before running tasks with del
 
 var config = {
   mode: {
@@ -14,6 +15,11 @@ var config = {
     }
   }
 }
+
+gulp.task('beginClean', beginClean); // close text editor before running
+function beginClean() {
+  return del(['./app/temp/sprite', './app/assets/images/sprites']);
+};
 
 gulp.task('createSprite', createSprite);
 function createSprite() {
@@ -35,4 +41,9 @@ function copySpriteCSS() {
     .pipe(gulp.dest('./app/assets/styles/modules'));
 };
 
-gulp.task('icons', gulp.series('createSprite', gulp.parallel('copySpriteGraphic', 'copySpriteCSS')));
+gulp.task('endClean', endClean); // close text editor before running
+function endClean() {
+  return del('./app/temp/sprite');
+};
+
+gulp.task('icons', gulp.series('beginClean', 'createSprite', gulp.parallel('copySpriteGraphic', 'copySpriteCSS'), 'endClean')); // close text editor before running
