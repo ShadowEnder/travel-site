@@ -9,7 +9,9 @@ var gulp = require('gulp'), // needed by both
     nested = require('postcss-nested'),
     cssImport = require('postcss-import'),
     mixins = require('postcss-mixins'),
-    hexrgba = require('postcss-hexrgba');
+    hexrgba = require('postcss-hexrgba'),
+    // scripts
+    webpack = require('webpack');
 
 // watch
 gulp.task('watch', function() {
@@ -19,14 +21,22 @@ gulp.task('watch', function() {
       baseDir: "app"
     }
   });
+
   watch('./app/index.html', function() {
     browserSync.reload();
     // html();
   }); // file on computer you want to watch, what happens when changes occur
+
   watch('./app/assets/styles/**/*.css', function() {
     styles();
     cssInject();
   });
+
+  watch('./app/assets/scripts/**/*.js', function() {
+    scripts();
+    // scriptsRefresh();
+  });
+
 });
 
 gulp.task('cssInject', cssInject);
@@ -47,3 +57,23 @@ function styles() {
     })
     .pipe(gulp.dest('./app/temp/styles'));
 };
+
+//scripts
+gulp.task('scripts', scripts);
+function scripts() {
+  webpack(require('../../webpack.config.js'), function (err, stats) {
+    if (err) {
+      console.log(err.toString());
+    }
+
+    console.log("\n" + stats.toString() + "\n");
+
+    browserSync.reload();
+  });
+};
+/*
+gulp.task('scriptsRefresh', scriptsRefresh);
+function scriptsRefresh() {
+  browserSync.reload();
+};
+*/
