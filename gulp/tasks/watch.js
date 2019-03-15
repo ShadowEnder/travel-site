@@ -11,7 +11,8 @@ var gulp = require('gulp'), // needed by both
     mixins = require('postcss-mixins'),
     hexrgba = require('postcss-hexrgba'),
     // scripts
-    webpack = require('webpack');
+    webpack = require('webpack'),
+    modernizr = require('gulp-modernizr');
 
 // watch
 gulp.task('watch', function() {
@@ -32,10 +33,7 @@ gulp.task('watch', function() {
     cssInject();
   });
 
-  watch('./app/assets/scripts/**/*.js', function() {
-    scripts();
-    // scriptsRefresh();
-  });
+  watch('./app/assets/scripts/**/*.js', gulp.series('modernizr', 'scripts'));
 
 });
 
@@ -59,6 +57,16 @@ function styles() {
 };
 
 //scripts
+gulp.task('modernizr', function() {
+  return gulp.src(['./app/assets/styles/**/*.css', './app/assets/scripts/**/*.js'])
+    .pipe(modernizr({
+      "options" : [
+        "setClasses"
+      ]
+    }))
+    .pipe(gulp.dest('./app/temp/scripts/'));
+});
+
 gulp.task('scripts', scripts);
 function scripts() {
   webpack(require('../../webpack.config.js'), function (err, stats) {
