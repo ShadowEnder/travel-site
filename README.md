@@ -10,6 +10,7 @@ Frameworks:
 
 Methodology:
 - BEM
+- Mobile First
 
 Automation:
 - Browser-Sync
