@@ -17,16 +17,16 @@ Methodology:
 Automation:
 - browser-sync
 - gulp
- - gulp-watch
+  - gulp-watch
 
 Backwards Compatibility:
 - babel
- - @babel/core
- - babel-loader
- - @babel/preset-env
+  - @babel/core
+  - babel-loader
+  - @babel/preset-env
 - gulp-modernizr
 - webpack
- - webpack-cli
+  - webpack-cli
 
 Images:
 - gulp-svg-sprite
